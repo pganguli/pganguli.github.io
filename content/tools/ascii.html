@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Check ASCII</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <script>
+      function isASCII(str) {
+        return /[\p{ASCII}]+/u.test(str);
+      }
+
+      function colorLetters() {
+        document.getElementById("container").remove();
+
+        const text = document.getElementById("text");
+        const letters = text.value.split("");
+
+        const container = document.createElement("div");
+        container.setAttribute("id", "container");
+        text.parentElement.appendChild(container);
+
+        letters.forEach((letter, index) => {
+          const elem = document.createElement("span");
+          elem.innerText = letter;
+          if (!isASCII(letter)) {
+            elem.style.background = "rgb(255,0,0)";
+          }
+          container.appendChild(elem);
+        });
+      }
+
+      function attemptSanitization() {
+        const text = document.getElementById("text");
+        const letters = text.value;
+        const normalized = letters.normalize("NFKD");
+        text.value = normalized.replace(/[^\p{ASCII}]/gu, "");
+        colorLetters();
+      }
+    </script>
+  </head>
+  <body onload="colorLetters()">
+    <textarea rows="10" id="text" oninput="colorLetters()" style="width:100%;"></textarea>
+    <br>
+    <button type="button" onclick="attemptSanitization()">Attempt Sanitization</button>
+    <hr>
+    <div id="container"></div>
+  </body>
+</html>
