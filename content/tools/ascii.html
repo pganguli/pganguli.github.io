@@ -22,11 +22,17 @@
 
         letters.forEach((letter, index) => {
           const elem = document.createElement("span");
+          
           elem.innerText = letter;
           if (!isASCII(letter)) {
             elem.style.background = "rgb(255,0,0)";
           }
+          
           container.appendChild(elem);
+          if (elem.offsetWidth == 0) {
+            elem.style.display = "inline-block";
+            elem.style.width = "5px";
+          }
         });
       }
 
