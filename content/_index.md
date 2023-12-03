@@ -6,7 +6,7 @@ title = "About"
 
 My name is Prateek Ganguli and I’m a programmer. I'm currently pursuing a B.Tech Degree in Computer Science from Calcutta University, along with a B.S. Degree in Data Science from Indian Institute of Technology, Madras. The vast majority of my free time is spent studying and working on side projects.
 
-Go check out my list of [projects]({{< ref "/projects" >}}) at my [blog]({{< ref "/blog" >}}).
+Go check out my list of [projects]({{< ref "/projects" >}}) or my [blog]({{< ref "/blog" >}}).
 
 ---
 
