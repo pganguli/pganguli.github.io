@@ -233,12 +233,13 @@
             style="display: none"
           />
 
-          <label for="description">Description:</label>
+          <label for="description">PAN Number:</label>
           <input
             type="text"
             id="description"
             name="description"
-            placeholder="Details such as payer PAN"
+            pattern="[A-Z]{5}[0-9]{4}[A-Z]"
+            placeholder="ABCD1234Z"
             value=""
             required
           />
