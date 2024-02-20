@@ -233,13 +233,15 @@
             style="display: none"
           />
 
-          <label for="description">PAN Number:</label>
+          <label for="description">PAN or Aadhaar:</label>
           <input
             type="text"
             id="description"
             name="description"
-            pattern="[A-Z]{5}[0-9]{4}[A-Z]"
-            placeholder="ABCD1234Z"
+            placeholder="9-digit PAN or 12-digit Aadhar"
+            size="30"
+            minlength="9"
+            maxlength="12"
             value=""
             required
           />
