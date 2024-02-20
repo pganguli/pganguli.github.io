@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UPI QR Code Generator</title>
+
+    <style>
+      select,
+      button,
+      input[type="text"],
+      input[type="number"],
+      input[type="tel"] {
+        display: block;
+        margin: 5px 0;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      .column {
+        float: left;
+        padding: 10px;
+      }
+
+      .row:after {
+        content: "";
+        display: table;
+        clear: both;
+      }
+
+      @media screen and (max-width: 600px) {
+        .column {
+          width: 100%;
+        }
+      }
+    </style>
+
+    <script>
+      function handleGenerate() {
+        const payee_name = document.getElementById("payee_name").value;
+        const amount = document.getElementById("amount").value;
+        const description = document.getElementById("description").value;
+
+        const payment_type = document.getElementById("payment_type").value;
+
+        switch (payment_type) {
+          case "upi_address":
+            const upi_id = document.getElementById("upi_id").value;
+            payee_address = upi_id;
+            break;
+          case "bank_acc":
+            const bank_acc_number =
+              document.getElementById("bank_acc_number").value;
+            const bank_ifsc_code =
+              document.getElementById("bank_ifsc_code").value;
+            payee_address = `${bank_acc_number}@${bank_ifsc_code}.ifsc.npci`;
+            break;
+          case "aadhaar":
+            const aadhaar_number =
+              document.getElementById("aadhaar_number").value;
+            payee_address = `${aadhaar_number}@aadhaar.npci`;
+            break;
+          case "mobile":
+            const mobile_number =
+              document.getElementById("mobile_number").value;
+            payee_address = `${mobile_number}@mobile.npci`;
+            break;
+        }
+
+        const merchant_category = "5111"
+        const txn_ref = "1234567887654321"
+        const minimum_amount = "0"
+        let uri = `upi://pay?pa=${payee_address}&pn=${payee_name}&mc=${merchant_category}&tr=${txn_ref}&tn=${description}&am=${amount}&mam=${minimum_amount}&cu=INR`;
+        if (Number(amount) > 0) {
+          uri = `upi://pay?pa=${payee_address}&pn=${payee_name}&mc=${merchant_category}&tr=${txn_ref}&tn=${description}&am=${amount}&cu=INR`;
+        }
+
+        document.getElementById("qr_link").href = uri;
+        document.getElementById("qr_code").src =
+          `https://quickchart.io/qr?format=svg&text=${encodeURIComponent(uri)}`;
+
+        return false;
+      }
+
+      function toggleVisibility(el, visible) {
+        if (visible) {
+          el.labels[0].style.display = "block";
+          el.style["display"] = "block";
+          el.required = true;
+        } else {
+          el.labels[0].style.display = "none";
+          el.style.display = "none";
+          el.required = false;
+        }
+      }
+
+      function handlePaymentTypeChange() {
+        let payment_types = [
+          "upi_id",
+          "bank_acc_number",
+          "bank_ifsc_code",
+          "aadhaar_number",
+          "mobile_number",
+        ];
+        payment_types.forEach(function (payment_type) {
+          const el = document.getElementById(payment_type);
+          toggleVisibility(el, false);
+        });
+
+        const payment_type = document.getElementById("payment_type").value;
+
+        switch (payment_type) {
+          case "upi_address":
+            el = document.getElementById("upi_id");
+            toggleVisibility(el, true);
+            break;
+          case "bank_acc":
+            el = document.getElementById("bank_acc_number");
+            toggleVisibility(el, true);
+            el = document.getElementById("bank_ifsc_code");
+            toggleVisibility(el, true);
+            break;
+          case "aadhaar":
+            el = document.getElementById("aadhaar_number");
+            toggleVisibility(el, true);
+            break;
+          case "mobile":
+            el = document.getElementById("mobile_number");
+            toggleVisibility(el, true);
+            break;
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <h2>UPI QR Code Generator</h2>
+
+    <div class="row">
+      <div class="column">
+        <form onsubmit="return handleGenerate()">
+          <label for="payee_name">Payee Name:</label>
+          <input
+            type="text"
+            id="payee_name"
+            name="payee_name"
+            value="RAMAKRISHNA SARADA MISSION"
+            size="30"
+            required
+            disabled
+          />
+
+          <label for="payment_type">Payment Type:</label>
+          <select
+            id="payment_type"
+            name="payment_type"
+            onchange="handlePaymentTypeChange()"
+            required
+            disabled
+          >
+            <option value="upi_address" selected>UPI Address</option>
+            <option value="bank_acc">Bank Account</option>
+            <option value="aadhaar">Aadhaar</option>
+            <option value="mobile">Mobile</option>
+          </select>
+
+          <label for="upi_id">UPI ID:</label>
+          <input
+            type="text"
+            id="upi_id"
+            name="upi_id"
+            value="201450910010575@cnrb"
+            required
+            disabled
+          />
+
+          <label for="bank_acc_number" style="display: none"
+            >Bank Account Number:</label
+          >
+          <input
+            type="number"
+            id="bank_acc_number"
+            name="bank_acc_number"
+            minlength="6"
+            maxlength="18"
+            pattern="[0-9]*"
+            value=""
+            style="display: none"
+          />
+
+          <label for="bank_ifsc_code" style="display: none">IFSC Code:</label>
+          <input
+            type="text"
+            id="bank_ifsc_code"
+            name="bank_ifsc_code"
+            pattern="[A-Z]{4}0[A-Z0-9]{6}"
+            value=""
+            style="display: none"
+          />
+
+          <label for="aadhaar_number" style="display: none"
+            >Aadhaar Number:</label
+          >
+          <input
+            type="number"
+            id="aadhaar_number"
+            name="aadhaar_number"
+            pattern="[0-9]{12}"
+            value=""
+            style="display: none"
+          />
+
+          <label for="mobile_number" style="display: none"
+            >Mobile Number:</label
+          >
+          <input
+            type="tel"
+            id="mobile_number"
+            name="mobile_number"
+            pattern="[0-9]{10}"
+            value=""
+            style="display: none"
+          />
+
+          <label for="amount" style="display: none">Amount:</label>
+          <input
+            type="number"
+            id="amount"
+            name="amount"
+            min="0"
+            value="0"
+            style="display: none"
+          />
+
+          <label for="description">Description:</label>
+          <input
+            type="text"
+            id="description"
+            name="description"
+            placeholder="Details such as payer PAN"
+            value=""
+            required
+          />
+
+          <button type="submit">Generate</button>
+        </form>
+      </div>
+      <div class="column">
+        <a id="qr_link" href="javascript:void(0);">
+          <img
+            id="qr_code"
+            src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+            alt="QR Code"
+            width="150"
+            height="150"
+          />
+        </a>
+      </div>
+    </div>
+  </body>
+</html>
