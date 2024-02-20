@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>UPI QR Code Generator</title>
+    <title>UPI QR Code</title>
 
     <style>
       select,
@@ -41,6 +41,7 @@
       function handleGenerate() {
         const payee_name = document.getElementById("payee_name").value;
         const amount = document.getElementById("amount").value;
+        const donor_name = document.getElementById("donor_name").value;
         const description = document.getElementById("description").value;
 
         const payment_type = document.getElementById("payment_type").value;
@@ -69,12 +70,12 @@
             break;
         }
 
-        const merchant_category = "5111"
-        const txn_ref = "1234567887654321"
-        const minimum_amount = "0"
-        let uri = `upi://pay?pa=${payee_address}&pn=${payee_name}&mc=${merchant_category}&tr=${txn_ref}&tn=${description}&am=${amount}&mam=${minimum_amount}&cu=INR`;
+        const merchant_category = "5111";
+        const txn_ref = "1234567887654321";
+        const minimum_amount = "0";
+        let uri = `upi://pay?pa=${payee_address}&pn=${payee_name}&mc=${merchant_category}&tr=${txn_ref}&tn=${donor_name} ~ ${description}&am=${amount}&mam=${minimum_amount}&cu=INR`;
         if (Number(amount) > 0) {
-          uri = `upi://pay?pa=${payee_address}&pn=${payee_name}&mc=${merchant_category}&tr=${txn_ref}&tn=${description}&am=${amount}&cu=INR`;
+          uri = `upi://pay?pa=${payee_address}&pn=${payee_name}&mc=${merchant_category}&tr=${txn_ref}&tn=${donor_name} ~ ${description}&am=${amount}&cu=INR`;
         }
 
         document.getElementById("qr_link").href = uri;
@@ -135,7 +136,7 @@
     </script>
   </head>
   <body>
-    <h2>UPI QR Code Generator</h2>
+    <h2>UPI QR Code</h2>
 
     <div class="row">
       <div class="column">
@@ -145,6 +146,7 @@
             type="text"
             id="payee_name"
             name="payee_name"
+            pattern="[A-Za-z0-9- .]*"
             value="RAMAKRISHNA SARADA MISSION"
             size="30"
             required
@@ -165,14 +167,13 @@
             <option value="mobile">Mobile</option>
           </select>
 
-          <label for="upi_id">UPI ID:</label>
+          <label for="upi_id" style="display: none">UPI ID:</label>
           <input
             type="text"
             id="upi_id"
             name="upi_id"
             value="201450910010575@cnrb"
-            required
-            disabled
+            style="display: none"
           />
 
           <label for="bank_acc_number" style="display: none"
@@ -233,6 +234,19 @@
             style="display: none"
           />
 
+
+          <label for="donor_name">Donor Name:</label>
+          <input
+            type="text"
+            id="donor_name"
+            name="donor_name"
+            placeholder="Firstname Lastname"
+            size="30"
+            pattern="[A-Za-z0-9- .]*"
+            value=""
+            required
+          />
+
           <label for="description">PAN or Aadhaar:</label>
           <input
             type="text"
@@ -240,6 +254,7 @@
             name="description"
             placeholder="9-digit PAN or 12-digit Aadhar"
             size="30"
+            pattern="[A-Z0-9]*"
             minlength="9"
             maxlength="12"
             value=""
@@ -250,15 +265,18 @@
         </form>
       </div>
       <div class="column">
-        <a id="qr_link" href="javascript:void(0);">
-          <img
-            id="qr_code"
-            src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
-            alt="QR Code"
-            width="150"
-            height="150"
-          />
-        </a>
+        <figure>
+          <a id="qr_link" href="javascript:void(0);">
+            <img
+              id="qr_code"
+              src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+              alt="QR Code"
+              width="150"
+              height="150"
+            />
+          </a>
+          <figcaption>Generate and then Scan or Click on QR Code</figcaption>
+        </figure>
       </div>
     </div>
   </body>
