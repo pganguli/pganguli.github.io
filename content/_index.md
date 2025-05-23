@@ -1,5 +1,7 @@
 +++
-title = "About"
+title = "Home"
+menu = "main"
+weight = 1
 +++
 
 📧 [`pganguli@cs.unc.edu`](mailto:pganguli@cs.unc.edu)
