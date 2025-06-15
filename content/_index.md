@@ -4,6 +4,10 @@ menu = "main"
 weight = 1
 +++
 
+---
+
+# About
+
 📧 [`pganguli@cs.unc.edu`](mailto:pganguli@cs.unc.edu)
 
 I am a PhD student in the [Department of Computer Science](https://cs.unc.edu) at the University of North Carolina, Chapel Hill, advised by [Samarjit Chakraborty](https://cs.unc.edu/~samarjit). My research interests include cyber physical systems and formal methods.
